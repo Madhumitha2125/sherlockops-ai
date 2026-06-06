@@ -1,7 +1,14 @@
 from groq import Groq
 import os
+import streamlit as st
 
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+# SAFE KEY LOADER (works both local + cloud)
+if "GROQ_API_KEY" in st.secrets:
+    api_key = st.secrets["GROQ_API_KEY"]
+else:
+    api_key = os.getenv("GROQ_API_KEY")
+
+client = Groq(api_key=api_key)
 
 
 def generate_ai_rca(user_question, evidence):

@@ -1,0 +1,51 @@
+{
+  "service": "payment-service",
+  "environment": "production",
+  "region": "ap-south-1",
+
+  "database": {
+    "host": "primary-db-cluster",
+    "replicas": 3,
+    "pool_size": 10,
+    "max_connections": 100,
+    "timeout": 30,
+    "retry_attempts": 3
+  },
+
+  "api_gateway": {
+    "rate_limit_per_minute": 1200,
+    "timeout_seconds": 25,
+    "retry_policy": "exponential_backoff",
+    "circuit_breaker_enabled": true
+  },
+
+  "payment_gateway": {
+    "provider": "stripe",
+    "timeout": 20,
+    "fallback_enabled": true
+  },
+
+  "cache": {
+    "type": "redis",
+    "hit_ratio_threshold": 0.85,
+    "eviction_policy": "LRU"
+  },
+
+  "logging": {
+    "level": "INFO",
+    "error_tracking": true,
+    "audit_enabled": true
+  },
+
+  "autoscaling": {
+    "enabled": true,
+    "min_instances": 2,
+    "max_instances": 10,
+    "cpu_threshold": 70
+  },
+
+  "security": {
+    "rate_limiting": true,
+    "ddos_protection": true
+  }
+}

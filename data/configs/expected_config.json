@@ -1,0 +1,5 @@
+{
+    "timeout": 30,
+    "retry": 3,
+    "db_pool_size": 10
+}

@@ -1,44 +1,37 @@
-from groq import Groq
-import os
-import streamlit as st
-
-# SAFE KEY LOADER (works both local + cloud)
-if "GROQ_API_KEY" in st.secrets:
-    api_key = st.secrets["GROQ_API_KEY"]
-else:
-    api_key = os.getenv("GROQ_API_KEY")
-
-client = Groq(api_key=api_key)
+from services.llm_manager import llm
 
 
-def generate_ai_rca(user_question, evidence):
+
+def generate_ai_rca(question, evidence):
+
+
     prompt = f"""
-You are SherlockOps AI, an enterprise SRE incident investigator.
 
-You MUST ONLY use the provided evidence. Do NOT assume anything outside it.
+You are SherlockOps AI.
 
-User Question:
-{user_question}
+Analyze this incident.
+
+Question:
+
+{question}
+
 
 Evidence:
+
 {evidence}
 
-Generate a structured RCA with:
+
+Return:
 
 1. Root Cause
-2. Evidence Used
-3. Business Impact
-4. Technical Impact
-5. Confidence Score (0-100)
-6. Recommendations
+2. Confidence Score
+3. Impact
+4. SQL Issue
+5. Configuration Drift
+6. Recovery Steps
+7. Prevention Recommendations
+
 """
 
-    response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[
-            {"role": "system", "content": "You are an expert SRE investigator."},
-            {"role": "user", "content": prompt}
-        ]
-    )
 
-    return response.choices[0].message.content
+    return llm.generate_response(prompt)
